@@ -1,0 +1,109 @@
+EJERCICIO 2: JERARQUIA CON ATRIBUTOS PROPIOS (Animal, Perro, Gato y Ave)
+
+CONTEXTO:
+Se utiliza Java 21 en la ide intellijeid, sin paquetes adicionales (solo java.util.ArrayList donde se indique). Es la practica 7 de MPOO (Herencia 1ra parte), Facultad de Ingenieria UNAM. Todo se ejecuta en consola, sin package.
+
+OBJETIVO:
+Disenar una jerarquia de clases donde cada subclase agrega atributos propios.
+Animal (clase base) tiene nombre, edad, hacerSonido() y toString().
+Perro agrega raza, Gato agrega deInterior y Ave agrega puedeVolar.
+Cada subclase reutiliza el constructor de Animal con super(...), sobrescribe hacerSonido() y sobrescribe toString() usando super.toString().
+En el Main se crea un arreglo de Animal con un objeto de cada clase, se recorre con for-each imprimiendo cada animal y su sonido, y se cuentan los tipos con instanceof.
+Son 5 archivos: Animal, Perro, Gato, Ave y Main.
+
+CODIGO
+                  ┌────────────────────────────────────┐
+                  │               Animal               │
+                  ├────────────────────────────────────┤
+                  │ - nombre : String                  │
+                  │ - edad : int                       │
+                  ├────────────────────────────────────┤
+                  │ + Animal(String, int)              │
+                  │ + getNombre() : String             │
+                  │ + getEdad() : int                  │
+                  │ + setEdad(int) : void              │
+                  │ + hacerSonido() : String           │
+                  │ + toString() : String              │
+                  └────────────────────────────────────┘
+                        ▲           ▲           ▲
+                        │           │           │ hereda de
+        ┌───────────────┴──┐ ┌──────┴─────────┐ ┌┴─────────────────┐
+        │      Perro       │ │      Gato      │ │       Ave        │
+        ├──────────────────┤ ├────────────────┤ ├──────────────────┤
+        │ - raza : String  │ │ - deInterior   │ │ - puedeVolar     │
+        ├──────────────────┤ │   : boolean    │ │   : boolean      │
+        │ + Perro(String,  │ ├────────────────┤ ├──────────────────┤
+        │   int, String)   │ │ + Gato(String, │ │ + Ave(String,    │
+        │ + getRaza()      │ │   int, boolean)│ │   int, boolean)  │
+        │   : String       │ │ + isDeInterior │ │ + isPuedeVolar() │
+        │ + hacerSonido()  │ │   () : boolean │ │   : boolean      │
+        │   : String       │ │ + hacerSonido()│ │ + hacerSonido()  │
+        │ + toString()     │ │   : String     │ │   : String       │
+        │   : String       │ │ + toString()   │ │ + toString()     │
+        └──────────────────┘ │   : String     │ │   : String       │
+                             └────────────────┘ └──────────────────┘
+                        ▲
+                        │ crea/utiliza
+                  ┌────────────────────────────────────┐
+                  │               Main                 │
+                  ├────────────────────────────────────┤
+                  │ + main(String[] args) : void       │
+                  └────────────────────────────────────┘
+
+Sonidos: Animal "...", Perro "Guau", Gato "Miau", Ave "Pio".
+Formato de toString (una sola linea):
+Animal: Nombre: X | Edad: E anios
+Perro:  Perro -> (toString de Animal) | Raza: R
+Gato:   Gato -> (toString de Animal) | De interior: Si/No
+Ave:    Ave -> (toString de Animal) | Puede volar: Si/No
+
+Datos de prueba para el Main:
+Animal ("Generico", 1), Perro ("Firulais", 3, "Labrador"), Gato ("Michi", 2, true),
+Ave ("Piolin", 1, true) y aparte Perro ("Rex", -4, "Pastor Aleman").
+
+RESTRICCIONES
+Los atributos son private; las subclases usan los de Animal con getters o con super.
+No se debe repetir en las subclases codigo que ya existe en Animal.
+No pueden ingresarse edades negativas: en el constructor se asigna 0 y en setEdad no se modifica el valor.
+Se debe usar @Override en todos los metodos sobrescritos.
+Para mostrar Si o No se usa el operador ternario.
+Quiero que todas las explicaciones, correcciones, ejemplos y soluciones de programacion se mantengan unicamente dentro de los temas que hemos visto hasta ahora en el curso.
+Hasta ahora hemos trabajado con:
+- Clases y objetos.
+- Atributos y metodos.
+- Constructores.
+- Tipos de datos primitivos y referencias.
+- Arreglos.
+- static y final.
+- Enumeraciones (enum).
+- Estructuras condicionales: if, if-else, switch-case y operador ternario.
+- Estructuras de repeticion: while, do-while y for.
+- for-each.
+- Ciclos anidados.
+- break y continue.
+- Colecciones basicas de Java.
+- List, Set y Map a nivel introductorio.
+- ArrayList.
+- HashSet.
+- Hashtable.
+- Recorrido de Hashtable mediante Enumeration y keys().
+- Uso basico de clases de java.util, como Scanner.
+- Interfaces a nivel basico.
+- Date y Calendar a nivel basico.
+- Herencia (1ra parte): extends, super, sobrescritura con @Override, toString, relaciones IS-A y HAS-A, clase Object, instanceof y modificadores private, protected y public.
+No utilices temas posteriores que todavia no hemos estudiado (clases abstractas, polimorfismo avanzado, genericos propios, streams, lambdas, records, packages).
+
+CRITERIOS DE EXITO
+Debe compilar sin errores ni advertencias.
+El recorrido del arreglo debe imprimir, cada animal en una sola linea seguido de su sonido:
+Nombre: Generico | Edad: 1 anios  /  Sonido: ...
+Perro -> Nombre: Firulais | Edad: 3 anios | Raza: Labrador  /  Sonido: Guau
+Gato -> Nombre: Michi | Edad: 2 anios | De interior: Si  /  Sonido: Miau
+Ave -> Nombre: Piolin | Edad: 1 anios | Puede volar: Si  /  Sonido: Pio
+El conteo con instanceof debe dar Perros: 1, Gatos: 1, Aves: 1.
+Perro("Rex", -4, "Pastor Aleman") debe guardar la edad en 0.
+
+FORMATO DE RESPUESTA
+Se necesitan 5 archivos .java: Animal.java, Perro.java, Gato.java, Ave.java y Main.java
+Codigo sin comentarios ni javadoc
+Al final una explicacion corta de donde se usa extends, super, @Override e instanceof

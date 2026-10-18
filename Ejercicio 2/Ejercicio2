@@ -1,128 +1,98 @@
-EJERCICIO 2: JERARQUIA CON ATRIBUTOS PROPIOS (Animal, Perro, Gato y Ave)
-
 CONTEXTO:
-Se utiliza Java 21 en la ide intellijeid, sin paquetes adicionales (solo java.util.ArrayList donde se indique). Es la practica 7 de MPOO (Herencia 1ra parte), Facultad de Ingenieria UNAM. Todo se ejecuta en consola, sin package.
+Se utiliza Java 21 en la IDE IntelliJ IDEA. Es la Práctica 7 de Modelos de Programación Orientada a Objetos (MPOO), Herencia (1ra parte), de la Facultad de Ingeniería, UNAM. El programa se ejecuta por consola, sin package, y utiliza Scanner y ArrayList de java.util como bibliotecas adicionales. Sigue el nivel y el estilo de la guía de Classroom y el formato de la práctica P6: menú repetitivo, captura de datos por teclado, validación de entradas y procesamiento de los datos ingresados.
 
 OBJETIVO:
-Disenar una jerarquia de clases donde cada subclase agrega atributos propios.
-Animal (clase base) tiene nombre, edad, hacerSonido() y toString().
-Perro agrega raza, Gato agrega deInterior y Ave agrega puedeVolar.
-Cada subclase reutiliza el constructor de Animal con super(...), sobrescribe hacerSonido() y sobrescribe toString() usando super.toString().
-En el Main se crea un arreglo de Animal con un objeto de cada clase, se recorre con for-each imprimiendo cada animal y su sonido, y se cuentan los tipos con instanceof.
-Son 5 archivos: Animal, Perro, Gato, Ave y Main.
+Crear una jerarquía de clases donde Animal sea la clase base y Perro, Gato y Ave sean subclases. Animal contiene nombre y edad. Perro agrega raza, Gato agrega deInterior y Ave agrega puedeVolar. Cada subclase debe reutilizar el constructor de Animal mediante super(...), sobrescribir hacerSonido() y sobrescribir toString() reutilizando super.toString(). El programa debe permitir registrar animales, mostrarlos con su sonido, contar cuántos hay de cada tipo y salir únicamente cuando el usuario lo indique. Los registros se guardan en un ArrayList<Animal> durante la ejecución.
 
 CODIGO
-+----------------------------------------------------+
-|                       Animal                       |
-+----------------------------------------------------+
-| - nombre : String                                  |
-| - edad : int                                       |
-+----------------------------------------------------+
-| + Animal(String, int)                              |
-| + getNombre() : String                             |
-| + getEdad() : int                                  |
-| + setEdad(int) : void                              |
-| + hacerSonido() : String                           |
-| + toString() : String                              |
-+----------------------------------------------------+
-              ^
-              |  hereda de Animal
-+----------------------------------------------------+
-|                       Perro                        |
-+----------------------------------------------------+
-| - raza : String                                    |
-+----------------------------------------------------+
-| + Perro(String, int, String)                       |
-| + getRaza() : String                               |
-| + hacerSonido() : String                           |
-| + toString() : String                              |
-+----------------------------------------------------+
-              ^
-              |  hereda de Animal
-+----------------------------------------------------+
-|                        Gato                        |
-+----------------------------------------------------+
-| - deInterior : boolean                             |
-+----------------------------------------------------+
-| + Gato(String, int, boolean)                       |
-| + isDeInterior() : boolean                         |
-| + hacerSonido() : String                           |
-| + toString() : String                              |
-+----------------------------------------------------+
-              ^
-              |  hereda de Animal
-+----------------------------------------------------+
-|                        Ave                         |
-+----------------------------------------------------+
-| - puedeVolar : boolean                             |
-+----------------------------------------------------+
-| + Ave(String, int, boolean)                        |
-| + isPuedeVolar() : boolean                         |
-| + hacerSonido() : String                           |
-| + toString() : String                              |
-+----------------------------------------------------+
-              ^
-              |  crea/utiliza
-+----------------------------------------------------+
-|                        Main                        |
-+----------------------------------------------------+
-| + main(String[] args) : void                       |
-+----------------------------------------------------+
+Diagrama de clases:
 
-Sonidos: Animal "...", Perro "Guau", Gato "Miau", Ave "Pio".
-Formato de toString (una sola linea):
-Animal: Nombre: X | Edad: E anios
-Perro:  Perro -> (toString de Animal) | Raza: R
-Gato:   Gato -> (toString de Animal) | De interior: Si/No
-Ave:    Ave -> (toString de Animal) | Puede volar: Si/No
++----------------------------------+
+|              Animal              |
++----------------------------------+
+| - nombre : String                |
+| - edad : int                     |
++----------------------------------+
+| + Animal(String, int)             |
+| + getNombre() : String            |
+| + getEdad() : int                 |
+| + setEdad(int) : void             |
+| + hacerSonido() : String          |
+| + toString() : String             |
++----------------------------------+
+          ▲              ▲              ▲
+          | hereda       | hereda       | hereda
+          |              |              |
++----------------+ +----------------+ +----------------+
+|     Perro      | |      Gato      | |      Ave       |
++----------------+ +----------------+ +----------------+
+| - raza:String  | | - deInterior:  | | - puedeVolar:  |
+|                | |   boolean      | |   boolean      |
++----------------+ +----------------+ +----------------+
+| + Perro(...)   | | + Gato(...)    | | + Ave(...)     |
+| + getRaza()    | | + isDeInterior()| | + isPuedeVolar()|
+| + hacerSonido()| | + hacerSonido()| | + hacerSonido()|
+| + toString()   | | + toString()   | | + toString()   |
++----------------+ +----------------+ +----------------+
+          \              |              /
+           \             |             /
+            \            |            /
+             +------------------------+
+             |          Main          |
+             +------------------------+
+             | - sc : Scanner (static)|
+             +------------------------+
+             | + main(String[]) : void|
+             | - mostrarMenu() : void |
+             | - leerEntero(String)   |
+             | - leerTexto(String)    |
+             | - leerSiNo(String)     |
+             | - registrarPerro(...)  |
+             | - registrarGato(...)   |
+             | - registrarAve(...)    |
+             | - mostrarAnimales(...) |
+             | - contarTipos(...)     |
+             +------------------------+
+             Main administra un ArrayList<Animal>
 
-Datos de prueba para el Main:
-Animal ("Generico", 1), Perro ("Firulais", 3, "Labrador"), Gato ("Michi", 2, true),
-Ave ("Piolin", 1, true) y aparte Perro ("Rex", -4, "Pastor Aleman").
+Comportamiento esperado:
+1. Registrar perro: solicita nombre, edad y raza.
+2. Registrar gato: solicita nombre, edad y si es de interior (s/n).
+3. Registrar ave: solicita nombre, edad y si puede volar (s/n).
+4. Mostrar animales: muestra los datos y el sonido de cada animal en una sola línea.
+5. Contar por tipo: muestra perros, gatos, aves y total, usando instanceof.
+6. Salir: termina el programa.
+
+Sonidos: Animal devuelve "...", Perro devuelve "Guau", Gato devuelve "Miau" y Ave devuelve "Pio".
 
 RESTRICCIONES
-Los atributos son private; las subclases usan los de Animal con getters o con super.
-No se debe repetir en las subclases codigo que ya existe en Animal.
-No pueden ingresarse edades negativas: en el constructor se asigna 0 y en setEdad no se modifica el valor.
-Se debe usar @Override en todos los metodos sobrescritos.
-Para mostrar Si o No se usa el operador ternario.
-Quiero que todas las explicaciones, correcciones, ejemplos y soluciones de programacion se mantengan unicamente dentro de los temas que hemos visto hasta ahora en el curso.
-Hasta ahora hemos trabajado con:
-- Clases y objetos.
-- Atributos y metodos.
-- Constructores.
-- Tipos de datos primitivos y referencias.
-- Arreglos.
-- static y final.
-- Enumeraciones (enum).
-- Estructuras condicionales: if, if-else, switch-case y operador ternario.
-- Estructuras de repeticion: while, do-while y for.
-- for-each.
-- Ciclos anidados.
-- break y continue.
-- Colecciones basicas de Java.
-- List, Set y Map a nivel introductorio.
-- ArrayList.
-- HashSet.
-- Hashtable.
-- Recorrido de Hashtable mediante Enumeration y keys().
-- Uso basico de clases de java.util, como Scanner.
-- Interfaces a nivel basico.
-- Date y Calendar a nivel basico.
-- Herencia (1ra parte): extends, super, sobrescritura con @Override, toString, relaciones IS-A y HAS-A, clase Object, instanceof y modificadores private, protected y public.
-No utilices temas posteriores que todavia no hemos estudiado (clases abstractas, polimorfismo avanzado, genericos propios, streams, lambdas, records, packages).
+- Todo debe ejecutarse por consola, sin package; utilizar Scanner y ArrayList de java.util.
+- Todos los atributos serán private.
+- Usar extends, super(...), @Override, super.toString() e instanceof donde corresponda.
+- No usar clases abstractas, streams, lambdas, records ni temas posteriores a los vistos en clase.
+- Si se escribe texto donde se espera un entero, mostrar "Dato no valido, ingrese un numero entero." y volver a preguntar.
+- No aceptar edades negativas; mostrar "No se permiten valores negativos." y volver a preguntar.
+- Nombre y raza no pueden quedar vacíos.
+- En preguntas de sí/no solo aceptar s o n; en otro caso mostrar "Opcion no disponible, responda s o n." y volver a preguntar.
+- Si la opción del menú no existe o se escribe texto, mostrar "Opcion no disponible.".
+- Si se intenta mostrar la lista vacía, indicar "No hay animales registrados.".
+- Mantener el código al nivel de la guía de Classroom, sin funcionalidades extra innecesarias.
+- El código no debe incluir comentarios ni Javadoc.
 
-CRITERIOS DE EXITO
-Debe compilar sin errores ni advertencias.
-El recorrido del arreglo debe imprimir, cada animal en una sola linea seguido de su sonido:
-Nombre: Generico | Edad: 1 anios  /  Sonido: ...
-Perro -> Nombre: Firulais | Edad: 3 anios | Raza: Labrador  /  Sonido: Guau
-Gato -> Nombre: Michi | Edad: 2 anios | De interior: Si  /  Sonido: Miau
-Ave -> Nombre: Piolin | Edad: 1 anios | Puede volar: Si  /  Sonido: Pio
-El conteo con instanceof debe dar Perros: 1, Gatos: 1, Aves: 1.
-Perro("Rex", -4, "Pastor Aleman") debe guardar la edad en 0.
+CRITERIOS DE ÉXITO
+El programa debe compilar y ejecutarse sin errores. El menú se repite hasta elegir 6.
+
+Prueba sugerida:
+1. Registrar perro: nombre Firulais; edad abc (rechazar); edad -2 (rechazar); edad 3; raza Labrador.
+2. Registrar gato: nombre Michi; edad 2; respuesta x (rechazar); respuesta s.
+3. Registrar ave: nombre Piolin; edad 1; puede volar n.
+4. Mostrar animales. Cada animal debe aparecer en una sola línea con sus datos y sonido:
+   Perro -> Nombre: Firulais | Edad: 3 anios | Raza: Labrador | Sonido: Guau
+   Gato -> Nombre: Michi | Edad: 2 anios | De interior: Si | Sonido: Miau
+   Ave -> Nombre: Piolin | Edad: 1 anios | Puede volar: No | Sonido: Pio
+5. Contar por tipo: Perros: 1, Gatos: 1, Aves: 1 y Total: 3.
+6. Las entradas 9 y hola deben mostrar "Opcion no disponible.". La opción 6 debe mostrar "Fin del programa." y terminar.
+7. Si se elige mostrar animales sin registros, debe aparecer "No hay animales registrados.".
 
 FORMATO DE RESPUESTA
-Se necesitan 5 archivos .java: Animal.java, Perro.java, Gato.java, Ave.java y Main.java
-Codigo sin comentarios ni javadoc
-Al final una explicacion corta de donde se usa extends, super, @Override e instanceof
+Entregar cinco archivos .java separados: Animal.java, Perro.java, Gato.java, Ave.java y Main.java. No usar package. El código debe estar completo y listo para ejecutarse en IntelliJ IDEA. Al final, incluir una explicación breve de dónde se usan extends, super, @Override e instanceof.
